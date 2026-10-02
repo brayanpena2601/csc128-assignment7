@@ -70,7 +70,42 @@ uses a mock function and proves it was never called and availability stayed
 unchanged. `test_loop_returns_errors_to_model` also verifies that the error
 is added to the conversation as a tool message.
 
-## Description rewrite observed during testing
+## Description rewrite: incorrect tool selection
+
+This was an additional controlled experiment with a deliberately ambiguous
+draft of `check_availability`'s description. The draft was used in the experiment,
+not previously deployed in the app. The actual API results are saved in
+[`description_evidence.json`](description_evidence.json).
+
+Question: `Are the study rooms open on Thursday?`
+
+Before:
+
+> Check whether study rooms are open on a given weekday. Use this when a student asks if rooms are open or available.
+
+Observed call: `check_availability(day="Thursday")`.
+The result was `No study rooms are available on Thursday.` The model then
+incorrectly answered: "No, study rooms are not open on Thursday."
+
+This was the wrong tool for an opening-hours question. An empty availability
+list means every room is unavailable, not that the facility is closed.
+
+After (the description now used in `tools.py`):
+
+> Check which study rooms are free on a given weekday. Call this when a student asks which rooms are available or before proposing a room to book. Do not call this for opening hours or to determine whether the facility is open; use get_hours for those questions. An empty availability list means no rooms are free, not that the facility is closed. This only reads availability and does not reserve a room.
+
+Observed call: `get_hours(day="Thursday")`.
+The result was `Opening hours on Thursday: 8:00 AM to 8:00 PM.` The model
+correctly answered that the study rooms were open during those hours.
+
+Only the `check_availability` description changed between these two requests.
+The model, system prompt, user question, other tool schemas, and
+`tool_choice="auto"` stayed the same. Each request started with a fresh
+conversation. No reservation was created or changed. This is evidence from
+one saved before/after comparison, not a guarantee of identical model behavior
+on every future request.
+
+## Additional fix: booking confirmation timing
 
 Prompt: `Book room 214 on Monday for Bruce.` This followed questions about
 Monday availability and Friday hours.

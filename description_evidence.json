@@ -1,0 +1,37 @@
+{
+  "purpose": "Controlled experiment using a deliberately ambiguous draft; not a claim that this draft was previously deployed.",
+  "tested_at": "2026-10-01T23:40:48.750618-04:00",
+  "model": "openai/gpt-oss-20b",
+  "prompt": "Are the study rooms open on Thursday?",
+  "system_prompt": "You are a helpful study-room assistant.\nUse tools for availability, opening hours, and booking requests.\nAsk for missing booking details: weekday, room number, and student name.\nNever claim a booking succeeded unless the tool result says it succeeded.\nWhen a student requests a booking and all three details are known, request\nbook_room now. Do not ask for confirmation in a chat message first.\nThe tool request opens the application's Confirm booking and Cancel booking\nbuttons. It does not create a reservation until the user clicks Confirm booking.\nNever treat a chat reply as authorization to bypass those buttons.\nAfter a cancellation, do not request that booking again unless the user asks anew.\nUse the tool results as facts; do not invent availability or opening hours.\nThese are classroom example data, not a live campus booking system.\n",
+  "tool_choice": "auto",
+  "changed_variable": "Only check_availability's description; same system prompt, user prompt, model and other schemas.",
+  "trials": [
+    {
+      "version": "before",
+      "description": "Check whether study rooms are open on a given weekday. Use this when a student asks if rooms are open or available.",
+      "tool_log": [
+        {
+          "tool_call_id": "fc_2efd8674-7b32-4a5a-8134-9e1e3b3185dc",
+          "name": "check_availability",
+          "arguments": "{\"day\":\"Thursday\"}",
+          "result": "No study rooms are available on Thursday."
+        }
+      ],
+      "answer": "No, study rooms are not open on Thursday."
+    },
+    {
+      "version": "after",
+      "description": "Check which study rooms are free on a given weekday. Call this when a student asks which rooms are available or before proposing a room to book. Do not call this for opening hours or to determine whether the facility is open; use get_hours for those questions. An empty availability list means no rooms are free, not that the facility is closed. This only reads availability and does not reserve a room.",
+      "tool_log": [
+        {
+          "tool_call_id": "fc_b3b80bb7-2104-4dd4-a822-8fba21e1b463",
+          "name": "get_hours",
+          "arguments": "{\"day\":\"Thursday\"}",
+          "result": "Opening hours on Thursday: 8:00 AM to 8:00 PM."
+        }
+      ],
+      "answer": "Yes\u2014study rooms are open on Thursdays from 8:00\u202fAM to 8:00\u202fPM."
+    }
+  ]
+}

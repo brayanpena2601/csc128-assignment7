@@ -92,9 +92,7 @@ TOOL_SCHEMAS = [
         "function": {
             "name": "check_availability",
             "description": (
-                "Check available study rooms for a weekday. Call this when a "
-                "student asks which rooms are free or before proposing a room "
-                "to book. This only reads availability and does not reserve a room."
+                'Check which study rooms are free on a given weekday. Call this when a student asks which rooms are available or before proposing a room to book. Do not call this for opening hours or to determine whether the facility is open; use get_hours for those questions. An empty availability list means no rooms are free, not that the facility is closed. This only reads availability and does not reserve a room.'
             ),
             "parameters": {
                 "type": "object",
