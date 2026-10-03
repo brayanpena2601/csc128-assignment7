@@ -47,7 +47,7 @@ Clicking **Cancel booking** returns a cancellation result without changing data.
 
 ## A function deliberately not written
 
-I did not write `delete_all_reservations`. It could erase other students'bookings, destroy records, and make rooms appear free when they are reserved.
+I did not write `delete_all_reservations`. It could erase other students' bookings, destroy records, and make rooms appear free when they are reserved.
 This assistant only needs to read information and create a requested booking. A model instruction alone would not justify exposing a bulk-delete function.
 
 ## An unknown tool and the test that proves rejection
