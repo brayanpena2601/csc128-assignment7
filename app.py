@@ -1,4 +1,6 @@
-"""CSC-128 Assignment 7: study-room agent interface."""
+"""CSC-128 Assignment 7: study-room agent interface.
+Brayan Penaherrera
+"""
 
 import copy
 import threading
@@ -54,7 +56,8 @@ def advance_agent(approval=None):
     if event["type"] == "confirmation":
         st.session_state.pending = event
     else:
-        st.session_state.chat.append({"role": "assistant", "content": event["content"]})
+        st.session_state.chat.append(
+            {"role": "assistant", "content": event["content"]})
         st.session_state.pending = None
         st.session_state.runner = None
 

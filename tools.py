@@ -1,8 +1,5 @@
 """CSC-128 Assignment 7: tools and their schemas.
-
 Brayan Penaherrera
-Availability and hours are example data, not live campus information.
-State is kept in memory and resets when the Python process restarts.
 """
 
 AVAILABILITY = {
@@ -167,4 +164,3 @@ TOOL_SCHEMAS = [
         },
     },
 ]
-
